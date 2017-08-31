@@ -5,6 +5,10 @@ use warnings;
 
 use App::cpm;
 
+# Push the hook onto @INC and then re-add all of @INC again.  This way, if we
+# got to the hook and tried to install, we can re-try @INC to see if the module
+# can now be used.
+
 sub import {
     shift;
     my @args = @_;
@@ -22,7 +26,8 @@ sub import {
         $name =~ s{/}{::}g;
         $name =~ s{\.pm\z}{};
         App::cpm->new->run( 'install', @args, $name );
-    };
+        return 1;
+    }, @INC;
 }
 
 1;
