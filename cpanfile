@@ -20,6 +20,7 @@ on 'configure' => sub {
 };
 
 on 'develop' => sub {
+  requires "Perl::Tidy" => "20170521";
   requires "Pod::Coverage::TrustPod" => "0";
   requires "Pod::Wordlist" => "0";
   requires "Test::CPAN::Changes" => "0.19";
