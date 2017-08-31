@@ -1,0 +1,95 @@
+package lazy;
+
+use strict;
+use warnings;
+
+use App::cpm;
+
+sub import {
+    shift;
+    my @args = @_;
+
+    push @INC, sub {
+        shift;
+
+        # Don't try to install if we're called inside an eval
+        my @caller = caller(1);
+        return
+            if ( ( $caller[3] && $caller[3] =~ m{eval} )
+            || ( $caller[1] && $caller[1] =~ m{eval} ) );
+
+        my $name = shift;
+        $name =~ s{/}{::}g;
+        $name =~ s{\.pm\z}{};
+        App::cpm->new->run( 'install', @args, $name );
+    };
+}
+
+1;
+
+# ABSTRACT: Lazily install missing Perl modules
+
+=pod
+
+=head1 SYNOPSIS
+
+    # Auto-install missing modules into local/
+    use local::lib 'local';
+    use lazy;
+
+    # Auto-install missing modules globally
+    use lazy qw( --global );
+
+=head2 DESCRIPTION
+
+Your co-worker sends you a one-off script to use.  You fire it up and realize
+you haven't got all of the dependencies installed in your work environment.
+Now you fire up the script and one by one, you find the missing modules and
+install them manually.
+
+Not anymore!
+
+C<lazy> will try to install any missing modules automatically, making your day
+just a little less long.  C<lazy> uses L<App::cpm> to perform this magic in the
+background.
+
+=head2 USAGE
+
+You can pass arguments directly to L<App::cpm> via the import statement.
+
+    use lazy qw( --verbose );
+
+Or
+
+    use lazy qw( --global --verbose );
+
+You get the idea.
+
+This module uses L<App::cpm>'s defaults, so by default modules will be
+installed to a folder called C<local> in your current working directory.  This
+folder will be created on demand.
+
+So, the default usage would be:
+
+    use local::lib 'local';
+    use lazy;
+
+If you want the module available generally, use the C<--global> switch.
+
+    use lazy qw( --global );
+
+=head2 CAVEATS
+
+Be sure to remove C<lazy> before you put your work into production.
+
+=head2 SEE ALSO
+
+L<Acme::Magic::Pony>
+
+=head2 ACKNOWLEDGEMENTS
+
+This entire idea was ripped off from L<Acme::Magic::Pony>.  The main difference
+is that it uses L<App::cpm> rather than L<CPAN::Shell>.
+
+=cut
+
