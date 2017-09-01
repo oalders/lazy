@@ -38,6 +38,14 @@ sub import {
 
 =head1 SYNOPSIS
 
+    # Auto-install missing modules into local/.  Note local::lib needs to
+    # precede lazy in this scenario in order for the script to compile on the
+    # first run.
+    perl -Mlocal::lib=local -Mlazy foo.pl
+
+    # Auto-install missing modules globally
+    perl -Mlocal::lib -Mlazy=--global foo.pl
+
     # Auto-install missing modules into local/
     use local::lib 'local';
     use lazy;
@@ -89,12 +97,12 @@ Be sure to remove C<lazy> before you put your work into production.
 
 =head2 SEE ALSO
 
-L<Acme::Magic::Pony>
+L<Acme::Magic::Pony>, L<lib::xi>, L<CPAN::AutoINC>, L<Module::AutoINC>
 
 =head2 ACKNOWLEDGEMENTS
 
 This entire idea was ripped off from L<Acme::Magic::Pony>.  The main difference
-is that it uses L<App::cpm> rather than L<CPAN::Shell>.
+is that we use L<App::cpm> rather than L<CPAN::Shell>.
 
 =cut
 

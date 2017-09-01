@@ -28,5 +28,4 @@ on 'develop' => sub {
   requires "Test::More" => "0.96";
   requires "Test::Pod::Coverage" => "1.08";
   requires "Test::Spelling" => "0.12";
-  requires "Test::Synopsis" => "0";
 };

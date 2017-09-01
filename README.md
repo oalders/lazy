@@ -10,6 +10,14 @@ version 0.000001
 
 # SYNOPSIS
 
+    # Auto-install missing modules into local/.  Note local::lib needs to
+    # precede lazy in this scenario in order for the script to compile on the
+    # first run.
+    perl -Mlocal::lib=local -Mlazy foo.pl
+
+    # Auto-install missing modules globally
+    perl -Mlocal::lib -Mlazy=--global foo.pl
+
     # Auto-install missing modules into local/
     use local::lib 'local';
     use lazy;
@@ -61,12 +69,12 @@ Be sure to remove `lazy` before you put your work into production.
 
 ## SEE ALSO
 
-[Acme::Magic::Pony](https://metacpan.org/pod/Acme::Magic::Pony)
+[Acme::Magic::Pony](https://metacpan.org/pod/Acme::Magic::Pony), [lib::xi](https://metacpan.org/pod/lib::xi), [CPAN::AutoINC](https://metacpan.org/pod/CPAN::AutoINC), [Module::AutoINC](https://metacpan.org/pod/Module::AutoINC)
 
 ## ACKNOWLEDGEMENTS
 
 This entire idea was ripped off from [Acme::Magic::Pony](https://metacpan.org/pod/Acme::Magic::Pony).  The main difference
-is that it uses [App::cpm](https://metacpan.org/pod/App::cpm) rather than [CPAN::Shell](https://metacpan.org/pod/CPAN::Shell).
+is that we use [App::cpm](https://metacpan.org/pod/App::cpm) rather than [CPAN::Shell](https://metacpan.org/pod/CPAN::Shell).
 
 # AUTHOR
 
