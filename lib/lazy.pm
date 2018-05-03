@@ -5,7 +5,7 @@ use warnings;
 
 our $VERSION = '0.000002';
 
-use App::cpm 0.974; # CLI has no $VERSION
+use App::cpm 0.974;    # CLI has no $VERSION
 use App::cpm::CLI;
 
 # Push the hook onto @INC and then re-add all of @INC again.  This way, if we
