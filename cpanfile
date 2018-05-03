@@ -1,4 +1,5 @@
-requires "App::cpm" => "0";
+requires "App::cpm" => "0.974";
+requires "App::cpm::CLI" => "0";
 requires "perl" => "5.006";
 requires "strict" => "0";
 requires "warnings" => "0";

@@ -3,7 +3,8 @@ package lazy;
 use strict;
 use warnings;
 
-use App::cpm;
+use App::cpm 0.974; # CLI has no $VERSION
+use App::cpm::CLI;
 
 # Push the hook onto @INC and then re-add all of @INC again.  This way, if we
 # got to the hook and tried to install, we can re-try @INC to see if the module
@@ -25,7 +26,7 @@ sub import {
         my $name = shift;
         $name =~ s{/}{::}g;
         $name =~ s{\.pm\z}{};
-        App::cpm->new->run( 'install', @args, $name );
+        App::cpm::CLI->new->run( 'install', @args, $name );
         return 1;
     }, @INC;
 }

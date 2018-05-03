@@ -1,6 +1,8 @@
 Revision history for lazy
 
 {{$NEXT}}
+    - App::cpm 0.973 broke this module. Switch to using App::cpm::CLI to fix
+      this.
 
 0.000001  2017-09-01 03:21:29Z
     - Initial release.
