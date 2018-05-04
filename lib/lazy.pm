@@ -10,7 +10,13 @@ use App::cpm::CLI;
 
 # Cargo-culted from App::cpm::CLI
 # Adding pass_through so that we don't have to keep up with all possible options
-use Getopt::Long qw(:config no_auto_abbrev no_ignore_case bundling pass_through);
+use Getopt::Long qw(
+    :config
+    no_auto_abbrev
+    no_ignore_case
+    bundling
+    pass_through
+);
 
 use Module::Loaded qw( is_loaded );
 
