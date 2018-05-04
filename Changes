@@ -3,6 +3,8 @@ Revision history for lazy
 {{$NEXT}}
     - App::cpm 0.973 broke this module. Switch to using App::cpm::CLI to fix
       this.
+    - Default to global installs, except when local::lib has already been
+      loaded
 
 0.000001  2017-09-01 03:21:29Z
     - Initial release.
