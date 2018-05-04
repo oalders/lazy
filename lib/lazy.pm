@@ -117,6 +117,15 @@ or, from inside your code:
 
     use lazy qw( -g );
 
+If you would like to install to a different local lib:
+
+    perl -Mlocal::lib=my_local_lib -Mlazy path/to/script.pl
+
+or, from inside your code:
+
+    use local::lib qw( my_local_lib );
+    use lazy;
+
 ********
 
 EOF
