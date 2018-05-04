@@ -20,10 +20,6 @@ use Getopt::Long qw(
 
 use Module::Loaded qw( is_loaded );
 
-# Push the hook onto @INC and then re-add all of @INC again.  This way, if we
-# got to the hook and tried to install, we can re-try @INC to see if the module
-# can now be used.
-
 sub import {
     shift;
     my @args = @_;
@@ -78,6 +74,10 @@ sub import {
     }
 
     my $cpm = App::cpm::CLI->new;
+
+    # Push the hook onto @INC and then re-add all of @INC again.  This way, if
+    # we got to the hook and tried to install, we can re-try @INC to see if the
+    # module can now be used.
 
     push @INC, sub {
         shift;
