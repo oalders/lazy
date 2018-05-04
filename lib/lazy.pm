@@ -8,6 +8,12 @@ our $VERSION = '0.000002';
 use App::cpm 0.974;    # CLI has no $VERSION
 use App::cpm::CLI;
 
+# Cargo-culted from App::cpm::CLI
+# Adding pass_through so that we don't have to keep up with all possible options
+use Getopt::Long qw(:config no_auto_abbrev no_ignore_case bundling pass_through);
+
+use Module::Loaded qw( is_loaded );
+
 # Push the hook onto @INC and then re-add all of @INC again.  This way, if we
 # got to the hook and tried to install, we can re-try @INC to see if the module
 # can now be used.
@@ -29,27 +35,40 @@ sub import {
         $name =~ s{/}{::}g;
         $name =~ s{\.pm\z}{};
 
-        my $cpm = App::cpm::CLI->new;
-        $cpm->parse_options(@args);
+        my $is_global;
+        my $local_lib;
 
-        # Generally assume a global install.  However, if we're already using
-        # local::lib, let's try to DTRT and use the correct local::lib.  This
-        # may or may not be a good idea.  Poking around in App::cpm's internals
-        # is already a bad idea...
+        {
+            local @ARGV = @args;
 
-        if (
-            exists $INC{'local/lib.pm'}
-            && (
-                !@args
-                || (
-                    (
-                        !grep { $_ eq '-L' || $_ eq '--local-lib-contained' }
-                        @args
-                    )
-                    && !$cpm->{global}
-                )
-            )
-        ) {
+            # Stolen from App::cpm::CLI::parse_options()
+            GetOptions(
+                'L|local-lib-contained=s' => \$local_lib,
+                'g|global'                => \$is_global,
+            );
+        }
+
+        # Generally assume a global install, which makes the invocation as
+        # simple as:
+
+        # perl -Mlazy foo.pl
+
+        # However, if we're already using local::lib and --global has not been
+        # explicitly set and no local::lib has been explicitly set, let's try
+        # to DTRT and use the correct local::lib.
+
+        # This allows us to do something like:
+        # perl -Mlocal::lib -Mlazy foo.pl
+
+        # This may or may not be a good idea.
+
+        # Allowing --local-lib-contained to be passed is mostly useful for
+        # testing.  For real world cases, the user should specify the
+        # local::lib via local::lib itself.
+
+        # perl -Mlocal::lib=my_local_lib -Mlazy foo.pl
+
+        if ( ( !$is_global && !$local_lib ) && is_loaded('local::lib') ) {
             my @paths = local::lib->new->active_paths;
             my $path  = shift @paths;
             if ($path) {
@@ -58,19 +77,14 @@ sub import {
             }
         }
 
-        $cpm->parse_options(@args);
+        # Assume a global install if local::lib is not in use or has not been
+        # explicitly invoked.
 
-        # Assume a global install if no args are supplied and local::lib is not
-        # in use.  Originally I went with the defaults of installing to
-        # "local", but I constantly had to look remind myself how to do this,
-        # especially since I'd need to use local::lib to get the code to run as
-        # well.  The truly lazy way to do this is to default to the global
-        # install and let folks who need to sandbox their module installs take
-        # the extra steps.
+        elsif ( !$is_global && !$local_lib ) {
+            push @args, ('-g');
+        }
 
-        @args = ('-g') unless @args;
-
-        $cpm->run( 'install', @args, $name );
+        App::cpm::CLI->new->run( 'install', @args, $name );
         return 1;
     }, @INC;
 }

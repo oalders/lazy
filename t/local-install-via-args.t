@@ -30,8 +30,10 @@ my $rule = Path::Iterator::Rule->new->file->nonempty;
 my $next = $rule->iter($dir);
 my $found;
 while ( defined( my $file = $next->() ) ) {
-    diag $file;
-    $found = 1 if $file =~ m{Needs.pm\z};
+    if ( $file =~ m{Needs.pm\z} ) {
+        $found = 1;
+        last;
+    }
 }
 ok( $found, 'file installed locally' ) || ( note $stderr && note $stdout );
 
