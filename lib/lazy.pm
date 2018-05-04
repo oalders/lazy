@@ -22,6 +22,57 @@ sub import {
     shift;
     my @args = @_;
 
+    my $is_global;
+    my $local_lib;
+
+    {
+        local @ARGV = @args;
+
+        # Stolen from App::cpm::CLI::parse_options()
+        GetOptions(
+            'L|local-lib-contained=s' => \$local_lib,
+            'g|global'                => \$is_global,
+        );
+    }
+
+    # Generally assume a global install, which makes the invocation as
+    # simple as:
+
+    # perl -Mlazy foo.pl
+
+    # However, if we're already using local::lib and --global has not been
+    # explicitly set and no local::lib has been explicitly set, let's try
+    # to DTRT and use the correct local::lib.
+
+    # This allows us to do something like:
+    # perl -Mlocal::lib -Mlazy foo.pl
+
+    # This may or may not be a good idea.
+
+    # Allowing --local-lib-contained to be passed is mostly useful for
+    # testing.  For real world cases, the user should specify the
+    # local::lib via local::lib itself.
+
+    # perl -Mlocal::lib=my_local_lib -Mlazy foo.pl
+
+    if ( ( !$is_global && !$local_lib ) && is_loaded('local::lib') ) {
+        my @paths = local::lib->new->active_paths;
+        my $path  = shift @paths;
+        if ($path) {
+            push @args, ( '-L', $path );
+            _print_msg_about_local_lib($path);
+        }
+    }
+
+    # Assume a global install if local::lib is not in use or has not been
+    # explicitly invoked.
+
+    elsif ( !$is_global && !$local_lib ) {
+        push @args, ('-g');
+    }
+
+    my $cpm = App::cpm::CLI->new;
+
     push @INC, sub {
         shift;
 
@@ -35,56 +86,7 @@ sub import {
         $name =~ s{/}{::}g;
         $name =~ s{\.pm\z}{};
 
-        my $is_global;
-        my $local_lib;
-
-        {
-            local @ARGV = @args;
-
-            # Stolen from App::cpm::CLI::parse_options()
-            GetOptions(
-                'L|local-lib-contained=s' => \$local_lib,
-                'g|global'                => \$is_global,
-            );
-        }
-
-        # Generally assume a global install, which makes the invocation as
-        # simple as:
-
-        # perl -Mlazy foo.pl
-
-        # However, if we're already using local::lib and --global has not been
-        # explicitly set and no local::lib has been explicitly set, let's try
-        # to DTRT and use the correct local::lib.
-
-        # This allows us to do something like:
-        # perl -Mlocal::lib -Mlazy foo.pl
-
-        # This may or may not be a good idea.
-
-        # Allowing --local-lib-contained to be passed is mostly useful for
-        # testing.  For real world cases, the user should specify the
-        # local::lib via local::lib itself.
-
-        # perl -Mlocal::lib=my_local_lib -Mlazy foo.pl
-
-        if ( ( !$is_global && !$local_lib ) && is_loaded('local::lib') ) {
-            my @paths = local::lib->new->active_paths;
-            my $path  = shift @paths;
-            if ($path) {
-                push @args, ( '-L', $path );
-                _print_msg_about_local_lib($path);
-            }
-        }
-
-        # Assume a global install if local::lib is not in use or has not been
-        # explicitly invoked.
-
-        elsif ( !$is_global && !$local_lib ) {
-            push @args, ('-g');
-        }
-
-        App::cpm::CLI->new->run( 'install', @args, $name );
+        $cpm->run( 'install', @args, $name );
         return 1;
     }, @INC;
 }
