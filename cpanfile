@@ -1,5 +1,7 @@
 requires "App::cpm" => "0.974";
 requires "App::cpm::CLI" => "0";
+requires "Getopt::Long" => "0";
+requires "Module::Loaded" => "0";
 requires "perl" => "5.006";
 requires "strict" => "0";
 requires "warnings" => "0";
@@ -8,8 +10,11 @@ on 'test' => sub {
   requires "Capture::Tiny" => "0";
   requires "ExtUtils::MakeMaker" => "0";
   requires "File::Spec" => "0";
+  requires "Path::Iterator::Rule" => "0";
   requires "Test::More" => "0";
   requires "Test::RequiresInternet" => "0";
+  requires "Test::TempDir::Tiny" => "0";
+  requires "local::lib" => "0";
   requires "perl" => "5.006";
 };
 
