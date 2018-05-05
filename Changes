@@ -1,6 +1,6 @@
 Revision history for lazy
 
-{{$NEXT}}
+0.000003  2018-05-05 04:38:01Z
     - local::lib is now a required dependency
 
 0.000002  2018-05-04 19:15:11Z

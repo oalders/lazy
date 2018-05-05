@@ -21,6 +21,7 @@ my %WriteMakefileArgs = (
     "App::cpm::CLI" => 0,
     "Getopt::Long" => 0,
     "Module::Loaded" => 0,
+    "local::lib" => "2.000024",
     "strict" => 0,
     "warnings" => 0
   },
@@ -32,7 +33,7 @@ my %WriteMakefileArgs = (
     "Test::More" => 0,
     "Test::RequiresInternet" => 0,
     "Test::TempDir::Tiny" => 0,
-    "local::lib" => 0
+    "local::lib" => "2.000024"
   },
   "VERSION" => "0.000003",
   "test" => {
@@ -53,7 +54,7 @@ my %FallbackPrereqs = (
   "Test::More" => 0,
   "Test::RequiresInternet" => 0,
   "Test::TempDir::Tiny" => 0,
-  "local::lib" => 0,
+  "local::lib" => "2.000024",
   "strict" => 0,
   "warnings" => 0
 );
