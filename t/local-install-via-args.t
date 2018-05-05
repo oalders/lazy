@@ -35,6 +35,10 @@ while ( defined( my $file = $next->() ) ) {
         last;
     }
 }
-ok( $found, 'file installed locally' ) || ( note $stderr && note $stdout );
+ok( $found, 'file installed locally' );
+if ( !$found ) {
+    diag 'STDERR: ' . $stderr;
+    diag 'STDOUT: ' . $stdout;
+}
 
 done_testing();
