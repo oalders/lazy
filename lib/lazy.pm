@@ -3,7 +3,7 @@ package lazy;
 use strict;
 use warnings;
 
-our $VERSION = '0.000003';
+our $VERSION = '0.000004';
 
 use App::cpm 0.974;    # CLI has no $VERSION
 use App::cpm::CLI;
