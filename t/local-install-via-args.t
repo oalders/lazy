@@ -2,6 +2,7 @@ use strict;
 use warnings;
 
 use Path::Iterator::Rule ();
+use Path::Tiny qw( path );
 use Test::TempDir::Tiny qw( tempdir );
 
 my $dir;
@@ -39,6 +40,9 @@ ok( $found, 'file installed locally' );
 if ( !$found ) {
     diag 'STDERR: ' . $stderr;
     diag 'STDOUT: ' . $stdout;
+    if ( $stderr =~ m{See (.*) for details} ) {
+        diag path($1)->slurp;
+    }
 }
 
 done_testing();
