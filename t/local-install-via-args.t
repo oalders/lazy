@@ -13,7 +13,7 @@ BEGIN {
 use local::lib qw( --no-create );
 
 # Install in local lib even if it's already installed elsewhere
-use lazy ( '-L', $dir, '--reinstall' );
+use lazy ( '-L', $dir, '--reinstall', '-v' );
 
 use Capture::Tiny qw( capture );
 use Test::More;
