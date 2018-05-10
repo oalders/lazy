@@ -1,5 +1,7 @@
 Revision history for lazy
 
+{{$NEXT}}
+
 0.000005  2018-05-10 16:31:51Z
     - Skip live test if cpan.metacpan.org is not reachable
 
