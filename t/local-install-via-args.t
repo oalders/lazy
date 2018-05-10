@@ -19,6 +19,7 @@ use lazy ( '-L', $dir, '--reinstall', '-v' );
 use Capture::Tiny qw( capture );
 use Test::More;
 use Test::RequiresInternet (
+    'cpan.metacpan.org'        => 443,
     'cpanmetadb.plackperl.org' => 80,
     'fastapi.metacpan.org'     => 443,
 );
