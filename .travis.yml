@@ -13,10 +13,11 @@ cache:
     - '~/perl5'
 language: perl
 matrix:
+  allow_failures:
+    -
+      perl: dev
   fast_finish: 'true'
   include:
-    allow_failures:
-      - dev
     perl:
       -
         env: COVERAGE=1
