@@ -5,7 +5,7 @@ use warnings;
 
 our $VERSION = '0.000006';
 
-use App::cpm 0.974;    # CLI has no $VERSION
+use App::cpm 0.975;    # CLI has no $VERSION
 use App::cpm::CLI;
 
 # Cargo-culted from App::cpm::CLI
