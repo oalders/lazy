@@ -1,5 +1,7 @@
 Revision history for lazy
 
+{{$NEXT}}
+
 0.000006  2018-07-17 02:49:19Z
     - Bump App::cpm prereq to latest version (0.975)
     - use lazy later in t/local-install-via-args.t
