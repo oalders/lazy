@@ -39,11 +39,19 @@ while ( defined( my $file = $next->() ) ) {
     }
 }
 ok( $found, 'file installed locally' );
+
+# Mostly helpful for CPANTesters reports
 if ( !$found ) {
     diag 'STDERR: ' . $stderr;
     diag 'STDOUT: ' . $stdout;
     if ( $stderr =~ m{See (.*) for details} ) {
         diag path($1)->slurp;
+    }
+
+    diag 'The following files were installed:';
+    my $next = $rule->iter($dir);
+    while ( defined( my $file = $next->() ) ) {
+        diag $file;
     }
 }
 
