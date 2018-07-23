@@ -1,6 +1,7 @@
 Revision history for lazy
 
 {{$NEXT}}
+    - In general, don't install modules which are loaded inside an eval
 
 0.000006  2018-07-17 02:49:19Z
     - Bump App::cpm prereq to latest version (0.975)

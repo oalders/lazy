@@ -55,4 +55,16 @@ if ( !$found ) {
     }
 }
 
+{
+    my ( $stdout, $stderr, @result ) = eval {
+        capture { $cb->( undef, 'Try::Tiny' ) }
+    };
+    like(
+        $stderr,
+        qr{Code in package "main" is attempting to load Try::Tiny from inside an eval, so we are not installing Try::Tiny},
+        'module not installed from inside an eval'
+    );
+    note $stderr;
+}
+
 done_testing();
