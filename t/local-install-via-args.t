@@ -1,25 +1,23 @@
 use strict;
 use warnings;
+use local::lib qw( --no-create );
 
+use Capture::Tiny qw( capture );
 use Path::Iterator::Rule ();
 use Path::Tiny qw( path );
+use Test::More;
 use Test::TempDir::Tiny qw( tempdir );
+use Test::RequiresInternet (
+    'cpan.metacpan.org'        => 443,
+    'cpanmetadb.plackperl.org' => 80,
+    'fastapi.metacpan.org'     => 443,
+);
 
 my $dir;
 
 BEGIN {
     $dir = tempdir();
 }
-
-use local::lib qw( --no-create );
-
-use Capture::Tiny qw( capture );
-use Test::More;
-use Test::RequiresInternet (
-    'cpan.metacpan.org'        => 443,
-    'cpanmetadb.plackperl.org' => 80,
-    'fastapi.metacpan.org'     => 443,
-);
 
 # Install in local lib even if it's already installed elsewhere. However, we
 # will add lazy to @INC *after* all of the other use statements, so that we
