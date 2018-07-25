@@ -14,6 +14,7 @@ on 'test' => sub {
   requires "Capture::Tiny" => "0";
   requires "ExtUtils::MakeMaker" => "0";
   requires "File::Spec" => "0";
+  requires "LWP" => "6.35";
   requires "Path::Iterator::Rule" => "0";
   requires "Path::Tiny" => "0";
   requires "Test::More" => "0";

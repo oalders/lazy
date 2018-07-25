@@ -29,6 +29,7 @@ my %WriteMakefileArgs = (
     "Capture::Tiny" => 0,
     "ExtUtils::MakeMaker" => 0,
     "File::Spec" => 0,
+    "LWP" => "6.35",
     "Path::Iterator::Rule" => 0,
     "Path::Tiny" => 0,
     "Test::More" => 0,
