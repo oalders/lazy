@@ -27,7 +27,7 @@ BEGIN {
 # will add lazy to @INC *after* all of the other use statements, so that we
 # don't accidentally try to install any test deps here.
 use lazy (
-    '-L',                 $dir,          '--workers', 1, '--resolver',
+    '-L',                     $dir,          '--workers', 1, '--resolver',
     '02packages,' . $darkpan, '--reinstall', '-v'
 );
 
