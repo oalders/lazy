@@ -20,7 +20,8 @@ BEGIN {
     use Path::Tiny qw( path );
     use URI::file ();
 
-    $darkpan = URI::file->new_abs( path('t/test-data/darkpan')->stringify )
+    $darkpan
+        = URI::file->new( path('t/test-data/darkpan')->absolute->stringify )
         ->as_string;
     $dir = tempdir();
 }
@@ -29,8 +30,9 @@ BEGIN {
 # will add lazy to @INC *after* all of the other use statements, so that we
 # don't accidentally try to install any test deps here.
 use lazy (
-    '-L',                     $dir,          '--workers', 1, '--resolver',
-    '02packages,' . $darkpan, '--reinstall', '-v'
+    '-L', $dir, '--workers', 1, '--resolver',
+    '02packages,' . $darkpan, $^V < 5.16 ? ( '--resolver', 'metadb' ) : (),
+    '--reinstall', '-v'
 );
 
 # Acme::CPANAuthors::Canadian has static_install enabled.  This may resolve
