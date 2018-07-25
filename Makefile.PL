@@ -41,7 +41,7 @@ my %WriteMakefileArgs = (
     "URI::file" => 0,
     "local::lib" => "2.000024"
   },
-  "VERSION" => "0.000008",
+  "VERSION" => "0.000009",
   "test" => {
     "TESTS" => "t/*.t"
   }
