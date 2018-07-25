@@ -12,28 +12,40 @@ use Test::RequiresInternet (
     'cpanmetadb.plackperl.org' => 80,
     'fastapi.metacpan.org'     => 443,
 );
+use URI::file ();
 
+my $darkpan;
 my $dir;
 
 BEGIN {
-    $dir = tempdir();
+    use App::cpm::Resolver::02Packages ();
+    $darkpan = URI::file->new_abs( path('t/test-data/darkpan') )->as_string;
+    $dir     = tempdir();
 }
 
 # Install in local lib even if it's already installed elsewhere. However, we
 # will add lazy to @INC *after* all of the other use statements, so that we
 # don't accidentally try to install any test deps here.
-use lazy ( '-L', $dir, '--reinstall', '-v' );
+use lazy (
+    '-L',                 $dir,          '--workers', 1, '--resolver',
+    '02packages,' . $darkpan, '--reinstall', '-v'
+);
 
+my $dist = path('t/test-data/Local-StaticInstall-0.001.tar.gz');
+my $url  = URI::file->new_abs($dist);
+
+# Acme::CPANAuthors::Canadian has static_install enabled.  This may resolve
+# some issues with circular requires on CPAN Testers reports.
 my ($cb) = grep { ref $_ eq 'CODE' } @INC;
 my ( $stdout, $stderr, @result )
-    = capture { $cb->( undef, 'Try::Tiny' ) };
+    = capture { $cb->( undef, 'Local::StaticInstall' ) };
 like( $stderr, qr{installed}, 'module installed' );
 
 my $rule = Path::Iterator::Rule->new->file->nonempty;
 my $next = $rule->iter($dir);
 my $found;
 while ( defined( my $file = $next->() ) ) {
-    if ( $file =~ m{Tiny.pm\z} ) {
+    if ( $file =~ m{StaticInstall.pm\z} ) {
         $found = 1;
         last;
     }
@@ -53,18 +65,6 @@ if ( !$found ) {
     while ( defined( my $file = $next->() ) ) {
         diag $file;
     }
-}
-
-{
-    my ( $stdout, $stderr, @result ) = eval {
-        capture { $cb->( undef, 'Try::Tiny' ) }
-    };
-    like(
-        $stderr,
-        qr{Code in package "main" is attempting to load Try::Tiny from inside an eval, so we are not installing Try::Tiny},
-        'module not installed from inside an eval'
-    );
-    note $stderr;
 }
 
 done_testing();
