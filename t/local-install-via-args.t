@@ -4,7 +4,6 @@ use local::lib qw( --no-create );
 
 use Capture::Tiny qw( capture );
 use Path::Iterator::Rule ();
-use Path::Tiny qw( path );
 use Test::More;
 use Test::TempDir::Tiny qw( tempdir );
 use Test::RequiresInternet (
@@ -12,15 +11,17 @@ use Test::RequiresInternet (
     'cpanmetadb.plackperl.org' => 80,
     'fastapi.metacpan.org'     => 443,
 );
-use URI::file ();
 
 my $darkpan;
 my $dir;
 
 BEGIN {
-    use App::cpm::Resolver::02Packages ();
-    $darkpan = URI::file->new_abs( path('t/test-data/darkpan') )->as_string;
-    $dir     = tempdir();
+    use Path::Tiny qw( path );
+    use URI::file ();
+
+    $darkpan = URI::file->new_abs( path('t/test-data/darkpan')->stringify )
+        ->as_string;
+    $dir = tempdir();
 }
 
 # Install in local lib even if it's already installed elsewhere. However, we
@@ -30,9 +31,6 @@ use lazy (
     '-L',                     $dir,          '--workers', 1, '--resolver',
     '02packages,' . $darkpan, '--reinstall', '-v'
 );
-
-my $dist = path('t/test-data/Local-StaticInstall-0.001.tar.gz');
-my $url  = URI::file->new_abs($dist);
 
 # Acme::CPANAuthors::Canadian has static_install enabled.  This may resolve
 # some issues with circular requires on CPAN Testers reports.
