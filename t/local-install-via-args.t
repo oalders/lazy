@@ -16,6 +16,7 @@ my $darkpan;
 my $dir;
 
 BEGIN {
+    use App::cpm::Resolver::02Packages ();
     use Path::Tiny qw( path );
     use URI::file ();
 
