@@ -1,6 +1,7 @@
 Revision history for lazy
 
-{{$NEXT}}
+0.000009  2018-07-26 20:02:15Z
+    - Use a relative file path in test
 
 0.000008  2018-07-25 15:04:40Z
     - Stop detecting eval. This was a bad idea.

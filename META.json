@@ -88,7 +88,7 @@
          "web" : "https://github.com/oalders/lazy"
       }
    },
-   "version" : "0.000008",
+   "version" : "0.000009",
    "x_Dist_Zilla" : {
       "perl" : {
          "version" : "5.026001"
@@ -587,7 +587,7 @@
                   "branch" : null,
                   "changelog" : "Changes",
                   "signed" : 0,
-                  "tag" : "v0.000008",
+                  "tag" : "v0.000009",
                   "tag_format" : "v%v",
                   "tag_message" : "v%v"
                },

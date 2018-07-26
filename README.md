@@ -6,7 +6,7 @@ lazy - Lazily install missing Perl modules
 
 # VERSION
 
-version 0.000008
+version 0.000009
 
 # SYNOPSIS
 
