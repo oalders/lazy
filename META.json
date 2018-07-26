@@ -71,7 +71,6 @@
             "Test::More" : "0",
             "Test::RequiresInternet" : "0",
             "Test::TempDir::Tiny" : "0",
-            "URI::file" : "0",
             "local::lib" : "2.000024",
             "perl" : "5.010"
          }

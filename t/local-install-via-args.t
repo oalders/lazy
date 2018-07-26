@@ -18,12 +18,9 @@ my $dir;
 BEGIN {
     use App::cpm::Resolver::02Packages ();
     use Path::Tiny qw( path );
-    use URI::file ();
 
-    $darkpan
-        = URI::file->new( path('t/test-data/darkpan')->absolute->stringify )
-        ->as_string;
-    $dir = tempdir();
+    $darkpan = path('t/test-data/darkpan')->stringify;
+    $dir     = tempdir();
 }
 
 # Install in local lib even if it's already installed elsewhere. However, we

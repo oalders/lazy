@@ -20,7 +20,6 @@ on 'test' => sub {
   requires "Test::More" => "0";
   requires "Test::RequiresInternet" => "0";
   requires "Test::TempDir::Tiny" => "0";
-  requires "URI::file" => "0";
   requires "local::lib" => "2.000024";
   requires "perl" => "5.010";
 };

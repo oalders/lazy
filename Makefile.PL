@@ -38,7 +38,6 @@ my %WriteMakefileArgs = (
     "Test::More" => 0,
     "Test::RequiresInternet" => 0,
     "Test::TempDir::Tiny" => 0,
-    "URI::file" => 0,
     "local::lib" => "2.000024"
   },
   "VERSION" => "0.000009",
@@ -65,7 +64,6 @@ my %FallbackPrereqs = (
   "Test::RequiresInternet" => 0,
   "Test::TempDir::Tiny" => 0,
   "Try::Tiny" => 0,
-  "URI::file" => 0,
   "local::lib" => "2.000024",
   "strict" => 0,
   "warnings" => 0
