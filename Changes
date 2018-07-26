@@ -1,5 +1,7 @@
 Revision history for lazy
 
+{{$NEXT}}
+
 0.000009  2018-07-26 20:02:15Z
     - Use a relative file path in test
 
