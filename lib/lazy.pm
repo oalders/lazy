@@ -213,7 +213,7 @@ Just make sure that you C<use local::lib> before you C<use lazy>.
 
 =head2 SEE ALSO
 
-L<Acme::Magic::Pony>, L<lib::xi>, L<CPAN::AutoINC>, L<Module::AutoINC>, L<Acme::Intraweb>, L<The::Net>
+L<Acme::Intraweb>, L<Acme::Magic::Pony>, L<CPAN::AutoINC>, L<lib::xi>, L<Module::AutoINC>, L<Module::AutoLoad>, L<The::Net> and L<Class::Autouse>
 
 =head2 ACKNOWLEDGEMENTS
 
