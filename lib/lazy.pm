@@ -7,7 +7,7 @@ our $VERSION = '0.000010';
 
 use App::cpm 0.975;    # CLI has no $VERSION
 use App::cpm::CLI ();
-use Carp qw(longmess);
+use Carp qw( longmess );
 use Try::Tiny qw( catch try );
 
 # Cargo-culted from App::cpm::CLI
