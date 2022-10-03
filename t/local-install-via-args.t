@@ -4,7 +4,7 @@ use local::lib qw( --no-create );
 
 use Capture::Tiny        qw( capture );
 use Path::Iterator::Rule ();
-use Test::More;
+use Test::More import => [qw( diag done_testing like ok )];
 use Test::TempDir::Tiny qw( tempdir );
 use Test::RequiresInternet (
     'cpan.metacpan.org'        => 443,
