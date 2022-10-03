@@ -28,15 +28,16 @@ BEGIN {
 # don't accidentally try to install any test deps here.
 use lazy (
     '-L', $dir, '--workers', 1, '--resolver',
-    '02packages,' . $darkpan, $^V < 5.16 ? ( '--resolver', 'metadb' ) : (),
+    '02packages,' . $darkpan,
+    $^V < 5.16 ? ( '--resolver', 'metadb' ) : (),
     '--reinstall', '-v'
 );
 
 # Acme::CPANAuthors::Canadian has static_install enabled.  This may resolve
 # some issues with circular requires on CPAN Testers reports.
 my ($cb) = grep { ref $_ eq 'CODE' } @INC;
-my ( $stdout, $stderr, @result )
-    = capture { $cb->( undef, 'Local::StaticInstall' ) };
+my ( $stdout, $stderr, @result ) =
+  capture { $cb->( undef, 'Local::StaticInstall' ) };
 like( $stderr, qr{installed}, 'module installed' );
 
 my $rule = Path::Iterator::Rule->new->file->nonempty;
