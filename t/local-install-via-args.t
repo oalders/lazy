@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use local::lib qw( --no-create );
 
-use Capture::Tiny qw( capture );
+use Capture::Tiny        qw( capture );
 use Path::Iterator::Rule ();
 use Test::More;
 use Test::TempDir::Tiny qw( tempdir );
@@ -17,7 +17,7 @@ my $dir;
 
 BEGIN {
     use App::cpm::Resolver::02Packages ();
-    use Path::Tiny qw( path );
+    use Path::Tiny                     qw( path );
 
     $darkpan = path('t/test-data/darkpan')->stringify;
     $dir     = tempdir();
@@ -28,7 +28,8 @@ BEGIN {
 # don't accidentally try to install any test deps here.
 use lazy (
     '-L', $dir, '--workers', 1, '--resolver',
-    '02packages,' . $darkpan, $^V < 5.16 ? ( '--resolver', 'metadb' ) : (),
+    '02packages,' . $darkpan,
+    $^V < 5.16 ? ( '--resolver', 'metadb' ) : (),
     '--reinstall', '-v'
 );
 
