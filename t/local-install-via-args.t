@@ -41,15 +41,17 @@ my ( $stdout, $stderr, @result )
 like( $stderr, qr{installed}, 'module installed' );
 
 my $rule = Path::Iterator::Rule->new->file->nonempty;
-my $next = $rule->iter($dir);
 my $found;
-while ( defined( my $file = $next->() ) ) {
-    if ( $file =~ m{StaticInstall.pm\z} ) {
-        $found = 1;
-        last;
+{
+    my $next = $rule->iter($dir);
+    while ( defined( my $file = $next->() ) ) {
+        if ( $file =~ m{StaticInstall.pm\z} ) {
+            $found = 1;
+            last;
+        }
     }
+    ok( $found, 'file installed locally' );
 }
-ok( $found, 'file installed locally' );
 
 # Mostly helpful for CPANTesters reports
 if ( !$found ) {
