@@ -16,8 +16,7 @@ my $darkpan;
 my $dir;
 
 BEGIN {
-    use App::cpm::Resolver::02Packages ();
-    use Path::Tiny                     qw( path );
+    use Path::Tiny qw( path );
 
     $darkpan = path('t/test-data/darkpan')->stringify;
     $dir     = tempdir();
