@@ -38,6 +38,11 @@ diag 'use lazy complete';
 # Acme::CPANAuthors::Canadian has static_install enabled.  This may resolve
 # some issues with circular requires on CPAN Testers reports.
 my ($cb) = grep { ref $_ eq 'CODE' } @INC;
+use B::Deparse ();
+my $deparse = B::Deparse->new;
+diag $deparse->coderef2text($cb);
+use DDP;
+diag( np $cb);
 my ( $stdout, $stderr, @result )
     = capture { $cb->( undef, 'Local::StaticInstall' ) };
 like( $stderr, qr{installed}, 'module installed' );
