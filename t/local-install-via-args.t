@@ -4,8 +4,7 @@ use local::lib qw( --no-create );
 
 use Capture::Tiny        qw( capture );
 use Path::Iterator::Rule ();
-use Test::More;
-use Test::TempDir::Tiny qw( tempdir );
+use Test::More import => [qw( diag done_testing like ok )];
 use Test::RequiresInternet (
     'cpan.metacpan.org'        => 443,
     'cpanmetadb.plackperl.org' => 80,
@@ -16,7 +15,7 @@ my $darkpan;
 my $dir;
 
 BEGIN {
-    use Path::Tiny qw( path );
+    use Path::Tiny qw( path tempdir );
 
     $darkpan = path('t/test-data/darkpan')->stringify;
     $dir     = tempdir();
