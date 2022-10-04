@@ -21,6 +21,8 @@ BEGIN {
     $dir     = tempdir();
 }
 
+diag 'about to use lazy';
+
 # Install in local lib even if it's already installed elsewhere. However, we
 # will add lazy to @INC *after* all of the other use statements, so that we
 # don't accidentally try to install any test deps here.
@@ -30,6 +32,8 @@ use lazy (
     $^V < 5.16 ? ( '--resolver', 'metadb' ) : (),
     '--reinstall', '-v'
 );
+
+diag 'use lazy complete';
 
 # Acme::CPANAuthors::Canadian has static_install enabled.  This may resolve
 # some issues with circular requires on CPAN Testers reports.
