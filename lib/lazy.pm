@@ -94,6 +94,10 @@ sub import {
         shift;
         my $name = shift;
 
+        state %seen;
+        $seen{$name}++;
+        return if $seen{$name} > 2;
+
         $name =~ s{/}{::}g;
         $name =~ s{\.pm\z}{};
 
