@@ -101,6 +101,15 @@ sub import {
         $name =~ s{/}{::}g;
         $name =~ s{\.pm\z}{};
 
+        if ( $name =~ qr{\A(?:auto::.*\.al\Z)} ) {
+            warn "skipping autoloader file $name";
+            return 1;
+        }
+        if ( $name =~ qr{\A(?:Net::DNS::Resolver::.*\Z)} ) {
+            warn "skipping $name";
+            return 1;
+        }
+
         try {
             $cpm->run( 'install', @args, $name );
         }
