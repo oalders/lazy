@@ -2,13 +2,17 @@ package lazy;
 
 use strict;
 use warnings;
+use feature qw( say state );
 
 our $VERSION = '0.000010';
 
-use App::cpm 0.975;    # CLI has no $VERSION
-use App::cpm::CLI ();
-use Carp          qw( longmess );
-use Try::Tiny     qw( catch try );
+use App::cpm 0.975 ();                # CLI has no $VERSION
+use App::cpm::CLI  ();
+use Carp           qw( longmess );
+use Capture::Tiny  qw( :all ); ## no perlimports
+use Sub::Name      qw( subname );
+use Sub::Identify  qw( sub_name );
+use Try::Tiny      qw( catch try );
 
 # Cargo-culted from App::cpm::CLI
 # Adding pass_through so that we don't have to keep up with all possible options
@@ -28,6 +32,12 @@ sub import {
 
     my $is_global;
     my $local_lib;
+
+    # Don't add this to @INC twice
+    for my $i (@INC) {
+        next unless ref $i && ref $i eq 'CODE';
+        return if sub_name($i) eq '_lazy_worker';
+    }
 
     {
         local @ARGV = @args;
@@ -80,10 +90,8 @@ sub import {
     # Push the hook onto @INC and then re-add all of @INC again.  This way, if
     # we got to the hook and tried to install, we can re-try @INC to see if the
     # module can now be used.
-
-    push @INC, sub {
+    my $_lazy = sub {
         shift;
-
         my $name = shift;
 
         $name =~ s{/}{::}g;
@@ -96,8 +104,10 @@ sub import {
             warn longmess();
             warn $_;
         };
-        return 1;
-    }, @INC;
+        return 0;
+    };
+    subname '_lazy_worker', $_lazy;
+    push @INC, $_lazy, @INC;
 }
 
 sub _print_msg_about_local_lib {
