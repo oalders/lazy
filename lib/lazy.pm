@@ -7,12 +7,12 @@ use feature qw( say state );
 our $VERSION = '0.000010';
 
 use App::cpm 0.997017 ();                # CLI has no $VERSION
-use App::cpm::CLI  ();
-use Carp           qw( longmess );
-use Capture::Tiny  qw( :all );        ## no perlimports
-use Sub::Name      qw( subname );
-use Sub::Identify  qw( sub_name );
-use Try::Tiny      qw( catch try );
+use App::cpm::CLI     ();
+use Carp              qw( longmess );
+use Capture::Tiny     qw( :all );        ## no perlimports
+use Sub::Name         qw( subname );
+use Sub::Identify     qw( sub_name );
+use Try::Tiny         qw( catch try );
 
 # Cargo-culted from App::cpm::CLI
 # Adding pass_through so that we don't have to keep up with all possible options
