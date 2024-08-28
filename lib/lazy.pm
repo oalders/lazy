@@ -96,7 +96,7 @@ sub import {
 
         state %seen;
         $seen{$name}++;
-        return if $seen{$name} > 2;
+        return if $seen{$name} > 1;    # Limit recursion to a single attempt
 
         $name =~ s{/}{::}g;
         $name =~ s{\.pm\z}{};
@@ -114,10 +114,19 @@ sub import {
             $cpm->run( 'install', @args, $name );
         }
         catch {
-            warn longmess();
+            warn "Failed to install $name: " . longmess();
             warn $_;
         };
-        return 0;
+
+        # Re-check if the module is now available
+        eval { require $name };
+        if ($@) {
+            warn
+                "Module $name still not available after installation attempt";
+            return 0;
+        }
+
+        return 1;
     };
     subname '_lazy_worker', $_lazy;
     push @INC, $_lazy, @INC;
