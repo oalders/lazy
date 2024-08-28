@@ -6,7 +6,7 @@ use feature qw( say state );
 
 our $VERSION = '0.000010';
 
-use App::cpm 0.975 ();                # CLI has no $VERSION
+use App::cpm 0.997017 ();                # CLI has no $VERSION
 use App::cpm::CLI  ();
 use Carp           qw( longmess );
 use Capture::Tiny  qw( :all );        ## no perlimports
