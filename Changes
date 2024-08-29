@@ -1,5 +1,7 @@
 Revision history for lazy
 
+{{$NEXT}}
+
 1.000000  2024-08-29 02:16:08Z
     - Try to prevent deep recursion (GH#7) (Olaf Alders)
     - Simplify (change) public API (GH#7) (Olaf Alders)
