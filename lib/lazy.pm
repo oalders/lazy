@@ -6,13 +6,13 @@ use feature qw( say state );
 
 our $VERSION = '0.000010';
 
-use App::cpm 0.975 ();                # CLI has no $VERSION
-use App::cpm::CLI  ();
-use Carp           qw( longmess );
-use Capture::Tiny  qw( :all ); ## no perlimports
-use Sub::Name      qw( subname );
-use Sub::Identify  qw( sub_name );
-use Try::Tiny      qw( catch try );
+use App::cpm 0.997017 ();                # CLI has no $VERSION
+use App::cpm::CLI     ();
+use Carp              qw( longmess );
+use Capture::Tiny     qw( :all );        ## no perlimports
+use Sub::Name         qw( subname );
+use Sub::Identify     qw( sub_name );
+use Try::Tiny         qw( catch try );
 
 # Cargo-culted from App::cpm::CLI
 # Adding pass_through so that we don't have to keep up with all possible options
@@ -23,8 +23,6 @@ use Getopt::Long qw(
     bundling
     pass_through
 );
-
-use Module::Loaded qw( is_loaded );
 
 sub import {
     shift;
@@ -53,36 +51,23 @@ sub import {
     # simple as:
 
     # perl -Mlazy foo.pl
+    #
+    # To install into ./local:
+    # perl -Mlazy='-Llocal'
+    #
+    # To install into ./some-other-dir:
+    # perl -Mlazy='-Lsome-other-dir'
 
-    # However, if we're already using local::lib and --global has not been
-    # explicitly set and no local::lib has been explicitly set, let's try
-    # to DTRT and use the correct local::lib.
-
-    # This allows us to do something like:
-    # perl -Mlocal::lib -Mlazy foo.pl
-
-    # This may or may not be a good idea.
-
-    # Allowing --local-lib-contained to be passed is mostly useful for
-    # testing.  For real world cases, the user should specify the
-    # local::lib via local::lib itself.
-
-    # perl -Mlocal::lib=my_local_lib -Mlazy foo.pl
-
-    if ( ( !$is_global && !$local_lib ) && is_loaded('local::lib') ) {
-        my @paths = local::lib->new->active_paths;
-        my $path  = shift @paths;
-        if ($path) {
-            push @args, ( '-L', $path );
-            _print_msg_about_local_lib($path);
-        }
-    }
-
-    # Assume a global install if local::lib is not in use or has not been
-    # explicitly invoked.
-
-    elsif ( !$is_global && !$local_lib ) {
+    # Ensure global install by default
+    if ( !$local_lib ) {
+        print "🌍 global install if required\n" unless $ENV{HARNESS_ACTIVE};
         push @args, ('-g');
+    }
+    else {
+        print "🔨 Installing into $local_lib if required\n"
+            unless $ENV{HARNESS_ACTIVE};
+        require local::lib;
+        local::lib->import($local_lib);
     }
 
     my $cpm = App::cpm::CLI->new;
@@ -96,7 +81,7 @@ sub import {
 
         state %seen;
         $seen{$name}++;
-        return if $seen{$name} > 2;
+        return if $seen{$name} > 1;    # Limit recursion to a single attempt
 
         $name =~ s{/}{::}g;
         $name =~ s{\.pm\z}{};
@@ -114,47 +99,14 @@ sub import {
             $cpm->run( 'install', @args, $name );
         }
         catch {
-            warn longmess();
+            warn "Failed to install $name: " . longmess();
             warn $_;
         };
-        return 0;
+
+        return 1;
     };
     subname '_lazy_worker', $_lazy;
     push @INC, $_lazy, @INC;
-}
-
-sub _print_msg_about_local_lib {
-    my $path = shift;
-
-    print <<"EOF";
-
-********
-
-You haven't included any arguments for App::cpm via lazy, but you've
-loaded local::lib, so we're going to install all modules into:
-
-$path
-
-If you do not want to do this, you can explicitly invoke a global install via:
-
-    perl -Mlazy=-g path/to/script.pl
-
-or, from inside your code:
-
-    use lazy qw( -g );
-
-If you would like to install to a different local lib:
-
-    perl -Mlocal::lib=my_local_lib -Mlazy path/to/script.pl
-
-or, from inside your code:
-
-    use local::lib qw( my_local_lib );
-    use lazy;
-
-********
-
-EOF
 }
 
 1;
@@ -165,26 +117,34 @@ EOF
 
 =head1 SYNOPSIS
 
+    # At the command line
+
     # Auto-install missing modules globally
     perl -Mlazy foo.pl
 
-    # Auto-install missing modules into local_foo/.  Note local::lib needs to
-    # precede lazy in this scenario in order for the script to compile on the
-    # first run.
-    perl -Mlocal::lib=local_foo -Mlazy foo.pl
+    # Auto-install missing modules into ./local
+    perl -Mlazy='-Llocal' foo.pl
 
-    # Auto-install missing modules into local/
-    use local::lib 'local';
-    use lazy;
+    # Auto-install missing modules into ./some-other-dir
+    perl -Mlazy='-Lsome-other-dir' foo.pl
+
+    # In your code
 
     # Auto-install missing modules globally
     use lazy;
 
-    # Same as above, but explicity auto-install missing modules globally
-    use lazy qw( -g );
+    # Auto-install missing modules into ./local
+    use local::lib;
+    use lazy qw( -L local );
 
-    # Use a local::lib and get verbose, uncolored output
-    perl -Mlocal::lib=foo -Mlazy=-v,--no-color
+    # Auto-install missing modules into ./some-other-dir
+    use local::lib qw( some-other-dir );
+    use lazy qw( -L some-other-dir );
+
+    # Auto-install missing modules into ./some-other-dir and pass more options to App::cpm
+    use local::lib qw( some-other-dir );
+    use lazy qw( -L some-other-dir --man-pages --verbose --no-color );
+
 
 =head2 DESCRIPTION
 
@@ -218,19 +178,12 @@ So, the default usage would be:
 
     use lazy;
 
-If you want to use a local lib:
+If you want to install to a local lib, use L<local::lib> first:
 
-    use local::lib qw( my_local_lib );
-    use lazy;
-
-Lazy will automatically pick up on your chosen local::lib and install there.
-Just make sure that you C<use local::lib> before you C<use lazy>.
+    use local::lib qw( my-local-lib );
+    use lazy    q( -L my-local-lib );
 
 =head2 CAVEATS
-
-* If not installing globally, C<use local::lib> before you C<use lazy>
-
-* Don't pass the C<-L> or C<--local-lib-contained> args directly to C<lazy>.  Use L<local::lib> directly to get the best (and least confusing) results.
 
 * Remove C<lazy> before you put your work into production.
 
