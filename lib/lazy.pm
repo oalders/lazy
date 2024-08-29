@@ -145,6 +145,8 @@ sub import {
     use local::lib qw( some-other-dir );
     use lazy qw( -L some-other-dir --man-pages --verbose --no-color );
 
+    # Install App::perlimports via a one-liner, but why would you want to?
+    perl -Mlazy -MApp::perlimports -E 'say "ok"'
 
 =head2 DESCRIPTION
 
