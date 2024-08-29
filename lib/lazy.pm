@@ -118,6 +118,7 @@ sub import {
 =head1 SYNOPSIS
 
     # At the command line
+    # --------------------------------------------------
 
     # Auto-install missing modules globally
     perl -Mlazy foo.pl
@@ -129,6 +130,7 @@ sub import {
     perl -Mlazy='-Lsome-other-dir' foo.pl
 
     # In your code
+    # --------------------------------------------------
 
     # Auto-install missing modules globally
     use lazy;
@@ -144,6 +146,9 @@ sub import {
     # Auto-install missing modules into ./some-other-dir and pass more options to App::cpm
     use local::lib qw( some-other-dir );
     use lazy qw( -L some-other-dir --man-pages --verbose --no-color );
+
+    # In a one-liner?
+    # --------------------------------------------------
 
     # Install App::perlimports via a one-liner, but why would you want to?
     perl -Mlazy -MApp::perlimports -E 'say "ok"'
@@ -162,6 +167,12 @@ just a little less long.  C<lazy> uses L<App::cpm> to perform this magic in the
 background.
 
 =head2 USAGE
+
+    perl -Mlazy foo.pl
+
+Or use a local lib:
+
+    perl -Mlazy='-Llocal' foo.pl
 
 You can pass arguments directly to L<App::cpm> via the import statement.
 
