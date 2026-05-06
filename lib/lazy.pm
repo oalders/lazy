@@ -156,7 +156,7 @@ sub import {
     # Install App::perlimports via a one-liner, but why would you want to?
     perl -Mlazy -MApp::perlimports -E 'say "ok"'
 
-=head2 DESCRIPTION
+=head1 DESCRIPTION
 
 Your co-worker sends you a one-off script to use.  You fire it up and realize
 you haven't got all of the dependencies installed in your work environment.
@@ -169,7 +169,7 @@ C<lazy> will try to install any missing modules automatically, making your day
 just a little less long.  C<lazy> uses L<App::cpm> to perform this magic in the
 background.
 
-=head2 USAGE
+=head1 USAGE
 
     perl -Mlazy foo.pl
 
@@ -199,15 +199,15 @@ If you want to install to a local lib, use L<local::lib> first:
     use local::lib qw( my-local-lib );
     use lazy    q( -L my-local-lib );
 
-=head2 CAVEATS
+=head1 CAVEATS
 
 * Remove C<lazy> before you put your work into production.
 
-=head2 SEE ALSO
+=head1 SEE ALSO
 
 L<Acme::Intraweb>, L<Acme::Magic::Pony>, L<CPAN::AutoINC>, L<lib::xi>, L<Module::AutoINC>, L<Module::AutoLoad>, L<The::Net> and L<Class::Autouse>
 
-=head2 ACKNOWLEDGEMENTS
+=head1 ACKNOWLEDGEMENTS
 
 This entire idea was ripped off from L<Acme::Magic::Pony>.  The main difference
 is that we use L<App::cpm> rather than L<CPAN::Shell>.
