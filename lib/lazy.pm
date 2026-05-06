@@ -2,7 +2,7 @@ package lazy;
 
 use strict;
 use warnings;
-use feature qw( say state );
+use feature qw( state );
 
 our $VERSION = '1.000001';
 
