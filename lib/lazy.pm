@@ -94,6 +94,10 @@ sub import {
             warn "skipping $name";
             return 1;
         }
+        if ( $name eq 'Encode::ConfigLocal' ) {
+            warn "skipping $name";
+            return 1;
+        }
 
         try {
             $cpm->run( 'install', @args, $name );
