@@ -13,6 +13,7 @@ use Test::RequiresInternet (
 my ($cb) = grep { ref $_ eq 'CODE' } @INC;
 my ( $stdout, $stderr, @result ) = capture { $cb->( undef, 'Local::404' ) };
 my $ok = like( $stderr, qr{FAIL}, 'fake module not installed' );
+is_deeply( \@result, [], 'returns empty list after install attempt' );
 
 unless ($ok) {
     diag 'STDOUT: ' . $stdout;
