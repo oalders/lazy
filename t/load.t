@@ -12,10 +12,11 @@ use Test::RequiresInternet (
 
 my ($cb) = grep { ref $_ eq 'CODE' } @INC;
 my ( $stdout, $stderr, @result ) = capture { $cb->( undef, 'Local::404' ) };
-my $ok = like( $stderr, qr{FAIL}, 'fake module not installed' );
-is_deeply( \@result, [], 'returns empty list after install attempt' );
+my $like_ok = like( $stderr, qr{FAIL}, 'fake module not installed' );
+my $is_ok
+    = is_deeply( \@result, [], 'returns empty list after install attempt' );
 
-unless ($ok) {
+unless ( $like_ok && $is_ok ) {
     diag 'STDOUT: ' . $stdout;
     diag 'STDERR: ' . $stderr;
 }
