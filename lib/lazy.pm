@@ -85,11 +85,11 @@ sub import {
         $name =~ s{/}{::}g;
         $name =~ s{\.pm\z}{};
 
-        if ( $name =~ qr{\A(?:auto::.*\.al\Z)} ) {
+        if ( $name =~ qr{\Aauto::.*\.al\z} ) {
             warn "skipping autoloader file $name";
             return 1;
         }
-        if ( $name =~ qr{\A(?:Net::DNS::Resolver::.*\Z)} ) {
+        if ( $name =~ qr{\ANet::DNS::Resolver::} ) {
             warn "skipping $name";
             return 1;
         }
