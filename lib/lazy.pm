@@ -9,7 +9,6 @@ our $VERSION = '1.000001';
 use App::cpm 0.997017 ();                # CLI has no $VERSION
 use App::cpm::CLI     ();
 use Carp              qw( longmess );
-use Capture::Tiny     qw( :all );        ## no perlimports
 use Sub::Name         qw( subname );
 use Sub::Identify     qw( sub_name );
 use Try::Tiny         qw( catch try );
