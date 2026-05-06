@@ -87,15 +87,15 @@ sub import {
 
         if ( $name =~ qr{\A(?:auto::.*\.al\Z)} ) {
             warn "skipping autoloader file $name";
-            return 1;
+            return;
         }
         if ( $name =~ qr{\A(?:Net::DNS::Resolver::.*\Z)} ) {
             warn "skipping $name";
-            return 1;
+            return;
         }
         if ( $name eq 'Encode::ConfigLocal' ) {
             warn "skipping $name";
-            return 1;
+            return;
         }
 
         try {
@@ -106,7 +106,7 @@ sub import {
             warn $_;
         };
 
-        return 1;
+        return;
     };
     subname '_lazy_worker', $_lazy;
     push @INC, $_lazy, @INC;
