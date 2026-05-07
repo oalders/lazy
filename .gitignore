@@ -1,11 +1,11 @@
-blib/
-.build
 /lazy*
-local/
-Makefile
+*.sw*
+.build
+.tidyall.d/
 MYMETA.json
 MYMETA.yml
+Makefile
+blib/
+local/
 pm_to_blib
-*.sw*
-.tidyall.d/
 tidyall.ERR
