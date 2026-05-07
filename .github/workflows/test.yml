@@ -44,6 +44,24 @@ jobs:
         run: cpan-install-dist-deps && test-dist
         env:
           CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
+  lint-job:
+    name: Lint
+    runs-on: ubuntu-latest
+    container:
+      image: perldocker/perl-tester:5.42
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install ubi, omegasort and precious
+        uses: oalders/install-ubi-action@v0.0.6
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          projects: |
+            houseabsolute/omegasort
+            houseabsolute/precious
+      - name: Install Perl lint tools
+        run: cpm install -g --show-build-log-on-failure App::perlimports Perl::Critic Perl::Tidy
+      - name: Run precious lint
+        run: precious lint --all
   test-job:
     needs: build-job
     runs-on: ${{ matrix.os }}
