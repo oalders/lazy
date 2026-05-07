@@ -27,7 +27,6 @@ sub import {
     shift;
     my @args = @_;
 
-    my $is_global;
     my $local_lib;
 
     # Don't add this to @INC twice
@@ -40,9 +39,10 @@ sub import {
         local @ARGV = @args;
 
         # Stolen from App::cpm::CLI::parse_options()
+        # We only need to peek at -L here; everything else (including -g) is
+        # forwarded to App::cpm via pass_through.
         GetOptions(
             'L|local-lib-contained=s' => \$local_lib,
-            'g|global'                => \$is_global,
         );
     }
 
