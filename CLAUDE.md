@@ -16,7 +16,7 @@ This is a Dist::Zilla distribution managed by the `[@Author::OALDERS]` plugin bu
 - Author / release tests: `dzil xtest` or `RELEASE_TESTING=1 AUTHOR_TESTING=1 dzil test`
 - Install dev deps: `dzil authordeps --missing | cpm install -g -` then `dzil listdeps --develop --missing | cpm install -g -`
 - Regenerate cpanfile / Makefile.PL after editing `dist.ini`: `dzil regenerate`
-- Tidy / lint: `tidyall -a` (check), `tidyall -a -t` (auto-fix). Configs live in `perltidyrc`, `perlcriticrc`, `perlimports.toml`; rule wiring is in `tidyall.ini`.
+- Lint / tidy: `precious lint --all` (check), `precious tidy --all` (auto-fix). Configs live in `perltidyrc`, `perlcriticrc`, `perlimports.toml`; rule wiring is in `precious.toml`. `precious` itself plus `omegasort` (used to sort `.gitignore`) are Rust binaries — install via `ubi` or `cargo install`.
 - Release: `dzil release`
 
 `t/local-install-via-args.t` performs a live install against `cpan.metacpan.org` and `cpanmetadb.plackperl.org` — it needs internet and may be slow. `t/load.t` is the fast smoke test.
@@ -51,4 +51,6 @@ Two non-obvious constraints worth preserving:
 2. `coverage-job` — installs deps from the built tarball and runs `test-dist` with `CODECOV_TOKEN`.
 3. `test-job` — matrix of Perl 5.24 → 5.42 on `ubuntu-latest`, installs from `cpanfile` via `perl-actions/install-with-cpm`, runs `prove -lr t` with `AUTHOR_TESTING=0 RELEASE_TESTING=0`.
 
-The matrix step deliberately runs only end-user tests, so author-only failures (POD, spelling, tidyall) won't block PRs across old Perls — they're caught in `build-job` instead.
+The matrix step deliberately runs only end-user tests, so author-only failures (POD, spelling, precious) won't block PRs across old Perls — they're caught in `build-job` and `lint-job` instead.
+
+A standalone `lint-job` runs `precious lint --all` against the working tree on `ubuntu-latest` inside `perldocker/perl-tester:5.42`. It uses `oalders/install-ubi-action` to install `ubi`, `omegasort`, and `precious` from GitHub releases, then `cpm install` for the Perl-side tools (`App::perlimports`, `Perl::Critic`, `Perl::Tidy`). It does not depend on `build-job` and runs in parallel.
