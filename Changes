@@ -1,6 +1,13 @@
 Revision history for lazy
 
 {{$NEXT}}
+    - Fix @INC hook to return empty list (not 1) for skipped modules, so
+      require continues searching @INC (GH#22)
+    - Skip Encode::ConfigLocal in @INC hook
+    - Promote trailing POD =head2 sections to =head1
+    - Test against Perl 5.24 through 5.42
+    - Migrate lint/tidy tooling from Code::TidyAll to precious
+    - Drop unused Capture::Tiny import and feature 'say'
 
 1.000000  2024-08-29 02:16:08Z
     - Try to prevent deep recursion (GH#7) (Olaf Alders)
