@@ -20,6 +20,12 @@ version 1.000001
     # Auto-install missing modules into ./some-other-dir
     perl -Mlazy='-Lsome-other-dir' foo.pl
 
+    # Via PERL5OPT, e.g. when prove invokes perl for you
+    # --------------------------------------------------
+
+    PERL5OPT=-Mlazy prove -lvr t
+    PERL5OPT=-Mlazy=-Llocal prove -lvr t
+
     # In your code
     # --------------------------------------------------
 
@@ -86,6 +92,17 @@ If you want to install to a local lib, use [local::lib](https://metacpan.org/pod
 
     use local::lib qw( my-local-lib );
     use lazy    q( -L my-local-lib );
+
+## Via `PERL5OPT`
+
+If `prove` is invoking `perl` for you, set ["PERL5OPT" in perlrun](https://metacpan.org/pod/perlrun#PERL5OPT) in the
+environment and each spawned `perl` will pick `lazy` up automatically:
+
+    PERL5OPT=-Mlazy prove -lvr t
+    PERL5OPT=-Mlazy=-Llocal prove -lvr t
+
+Note that `PERL5OPT` uses commas to separate import arguments (per
+[perlrun](https://metacpan.org/pod/perlrun)), where `-M` on the command line uses spaces.
 
 # CAVEATS
 
