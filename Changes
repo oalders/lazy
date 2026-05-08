@@ -1,5 +1,7 @@
 Revision history for lazy
 
+{{$NEXT}}
+
 1.000001  2026-05-08 20:39:23Z
     - Fix @INC hook to return empty list (not 1) for skipped modules, so
       require continues searching @INC (GH#22)
