@@ -98,6 +98,7 @@ sub import {
             return;
         }
 
+        warn "lazy: installing $name ...\n";
         try {
             $cpm->run( 'install', @args, $name );
         }
@@ -131,6 +132,12 @@ sub import {
 
     # Auto-install missing modules into ./some-other-dir
     perl -Mlazy='-Lsome-other-dir' foo.pl
+
+    # Via PERL5OPT, e.g. when prove invokes perl for you
+    # --------------------------------------------------
+
+    PERL5OPT=-Mlazy prove -lvr t
+    PERL5OPT=-Mlazy=-Llocal prove -lvr t
 
     # In your code
     # --------------------------------------------------
@@ -198,6 +205,17 @@ If you want to install to a local lib, use L<local::lib> first:
 
     use local::lib qw( my-local-lib );
     use lazy    q( -L my-local-lib );
+
+=head2 Via C<PERL5OPT>
+
+If C<prove> is invoking C<perl> for you, set L<perlrun/PERL5OPT> in the
+environment and each spawned C<perl> will pick C<lazy> up automatically:
+
+    PERL5OPT=-Mlazy prove -lvr t
+    PERL5OPT=-Mlazy=-Llocal prove -lvr t
+
+Note that C<PERL5OPT> uses commas to separate import arguments (per
+L<perlrun>), where C<-M> on the command line uses spaces.
 
 =head1 CAVEATS
 
