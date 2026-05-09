@@ -27,26 +27,30 @@
 #   The diag block at the bottom dumps stderr, stdout, the cpm build log
 #   (if cpm pointed at one), the installed file list, and the Perl /
 #   App::cpm versions in play. That last bit matters: failures have
-#   historically clustered around specific App::cpm versions (see GH#36),
-#   so version info up-front is what unblocks debugging.
+#   historically clustered around specific App::cpm versions — the
+#   0.998000–0.999.x range is broken for x_static_install, fixed in
+#   v1.0.0 (see GH#36), so version info up-front is what unblocks
+#   debugging.
 
 use strict;
 use warnings;
 
 use Test::More import => [qw( diag done_testing like ok plan )];
 
-# App::cpm 0.998003 and earlier die with "Invalid option linkage for
+# App::cpm 0.998000 through 0.999.x die with "Invalid option linkage for
 # install_base=s" when installing this fixture's x_static_install
-# distribution. The bug reproduces on every Perl we tested, so the gate
-# is on the cpm version, not on $]. In practice this fires on Perl <
-# 5.24 where DynamicPrereqs caps cpm at 0.998003 (App::cpm v0.999.0+
-# raised its minimum to 5.24, see GH#36); on newer Perls we install
-# whatever cpm is current and the test runs.
+# distribution. The bug was introduced in 0.998000 and fixed in v1.0.0;
+# 0.997017 (and earlier) and v1.0.0+ both work. The bug reproduces on
+# every Perl we tested, so the gate is on the cpm version, not on $].
+# Our DynamicPrereqs cap pins Perl < 5.24 to 0.997017, so this skip is
+# a runtime safety net for smokers that may already have a broken cpm
+# installed (GH#36).
 use App::cpm ();
 use version  ();
 
 BEGIN {
-    if ( version->parse($App::cpm::VERSION) <= version->parse('0.998003') ) {
+    my $v = version->parse($App::cpm::VERSION);
+    if ( $v >= version->parse('0.998000') && $v < version->parse('v1.0.0') ) {
         plan skip_all =>
             "App::cpm $App::cpm::VERSION static-install path is broken; see GH#36";
     }
