@@ -32,11 +32,25 @@
 
 use strict;
 use warnings;
+
+use Test::More import => [qw( diag done_testing like ok plan )];
+
+# App::cpm v0.999.0+ raised its minimum to Perl v5.24, so on older Perls we
+# cap at 0.998003 (see DynamicPrereqs in dist.ini). The 0.998003 static
+# install code path dies with "Invalid option linkage for install_base=s"
+# on this fixture's x_static_install distribution under Perl < 5.24, and
+# there is no newer cpm release we can fall back to. Skip rather than
+# chase an upstream bug. Must run before `use lazy` since that import
+# pushes the @INC hook at compile time.
+BEGIN {
+    plan skip_all => 'App::cpm 0.998003 static install fails on Perl < 5.24'
+        if $] < 5.024;
+}
+
 use local::lib qw( --no-create );
 
 use Capture::Tiny        qw( capture );
 use Path::Iterator::Rule ();
-use Test::More import => [qw( diag done_testing like ok )];
 use Test::RequiresInternet (
     'cpan.metacpan.org'        => 443,
     'cpanmetadb.plackperl.org' => 80,

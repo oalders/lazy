@@ -4,6 +4,14 @@ Revision history for lazy
     - Cap App::cpm at 0.998003 on Perl < 5.24 via DynamicPrereqs, since
       App::cpm v0.999.0+ raised its minimum to 5.24 and otherwise won't
       install on older Perls (GH#36)
+    - Extend the GitHub Actions test matrix down to Perl 5.20 to validate
+      the App::cpm cap, and inject the same cap into cpanfile in the
+      workflow ([DynamicPrereqs] only writes Makefile.PL, not cpanfile,
+      so install-with-cpm needs the gate appended at CI time)
+    - Skip t/local-install-via-args.t on Perl < 5.24 — App::cpm 0.998003's
+      static-install code path dies with "Invalid option linkage for
+      install_base=s" on the test's x_static_install fixture, and there
+      is no newer cpm release we can fall back to on those Perls
     - Document t/local-install-via-args.t with detailed comments explaining
       the test's purpose, fixture, resolver choices and per-arg rationale,
       and emit Perl + App::cpm versions on failure to make CPAN testers
