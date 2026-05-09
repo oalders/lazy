@@ -8,6 +8,9 @@ Revision history for lazy
       the App::cpm cap, and inject the same cap into cpanfile in the
       workflow ([DynamicPrereqs] only writes Makefile.PL, not cpanfile,
       so install-with-cpm needs the gate appended at CI time)
+    - Pin install-with-cpm's bootstrap App::cpm to 0.998003 on Perl 5.20
+      and 5.22, since the action's default builds cpm from skaji/cpm
+      main (App::cpm v1.0+) which itself requires Perl 5.24
     - Skip t/local-install-via-args.t on Perl < 5.24 — App::cpm 0.998003's
       static-install code path dies with "Invalid option linkage for
       install_base=s" on the test's x_static_install fixture, and there

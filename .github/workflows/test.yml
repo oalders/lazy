@@ -100,11 +100,15 @@ jobs:
       - name: Cap App::cpm at 0.998003 on Perl < 5.24 (cpanfile)
         run: |
           printf '\nrequires "App::cpm" => "<= 0.998003" if "$]" < 5.024;\n' >> cpanfile
+      # install-with-cpm bootstraps cpm itself before reading cpanfile. The
+      # default `version: main` builds App::cpm v1.0+, which requires Perl
+      # 5.24, so pin the bootstrap to 0.998003 on older Perls (GH#36).
       - name: install deps using cpm
         uses: perl-actions/install-with-cpm@v2
         with:
           cpanfile: 'cpanfile'
           args: '--with-suggests --with-recommends --with-test'
+          version: ${{ (matrix.perl-version == '5.20' || matrix.perl-version == '5.22') && '0.998003' || 'main' }}
       - run: prove -lr t
         env:
           AUTHOR_TESTING: 0
