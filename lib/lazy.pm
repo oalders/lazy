@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use feature qw( state );
 
-our $VERSION = '1.000002';
+our $VERSION = '1.000003';
 
 use App::cpm 0.997017 ();                # CLI has no $VERSION
 use App::cpm::CLI     ();
