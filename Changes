@@ -11,10 +11,12 @@ Revision history for lazy
     - Pin install-with-cpm's bootstrap App::cpm to 0.998003 on Perl 5.20
       and 5.22, since the action's default builds cpm from skaji/cpm
       main (App::cpm v1.0+) which itself requires Perl 5.24
-    - Skip t/local-install-via-args.t on Perl < 5.24 — App::cpm 0.998003's
-      static-install code path dies with "Invalid option linkage for
-      install_base=s" on the test's x_static_install fixture, and there
-      is no newer cpm release we can fall back to on those Perls
+    - Skip t/local-install-via-args.t when App::cpm <= 0.998003 — those
+      releases' static-install code path dies with "Invalid option
+      linkage for install_base=s" on the test's x_static_install
+      fixture (verified on Perl 5.42; not Perl-version specific). In
+      practice this fires only on Perl < 5.24 where DynamicPrereqs
+      caps cpm at 0.998003
     - Document t/local-install-via-args.t with detailed comments explaining
       the test's purpose, fixture, resolver choices and per-arg rationale,
       and emit Perl + App::cpm versions on failure to make CPAN testers

@@ -35,16 +35,21 @@ use warnings;
 
 use Test::More import => [qw( diag done_testing like ok plan )];
 
-# App::cpm v0.999.0+ raised its minimum to Perl v5.24, so on older Perls we
-# cap at 0.998003 (see DynamicPrereqs in dist.ini). The 0.998003 static
-# install code path dies with "Invalid option linkage for install_base=s"
-# on this fixture's x_static_install distribution under Perl < 5.24, and
-# there is no newer cpm release we can fall back to. Skip rather than
-# chase an upstream bug. Must run before `use lazy` since that import
-# pushes the @INC hook at compile time.
+# App::cpm 0.998003 and earlier die with "Invalid option linkage for
+# install_base=s" when installing this fixture's x_static_install
+# distribution. The bug reproduces on every Perl we tested, so the gate
+# is on the cpm version, not on $]. In practice this fires on Perl <
+# 5.24 where DynamicPrereqs caps cpm at 0.998003 (App::cpm v0.999.0+
+# raised its minimum to 5.24, see GH#36); on newer Perls we install
+# whatever cpm is current and the test runs.
+use App::cpm ();
+use version  ();
+
 BEGIN {
-    plan skip_all => 'App::cpm 0.998003 static install fails on Perl < 5.24'
-        if $] < 5.024;
+    if ( version->parse($App::cpm::VERSION) <= version->parse('0.998003') ) {
+        plan skip_all =>
+            "App::cpm $App::cpm::VERSION static-install path is broken; see GH#36";
+    }
 }
 
 use local::lib qw( --no-create );
