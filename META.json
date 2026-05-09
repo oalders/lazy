@@ -3,7 +3,7 @@
    "author" : [
       "Olaf Alders <olaf@wundercounter.com>"
    ],
-   "dynamic_config" : 0,
+   "dynamic_config" : 1,
    "generated_by" : "Dist::Zilla version 6.037, CPAN::Meta::Converter version 2.150013",
    "license" : [
       "artistic_2"
@@ -76,7 +76,8 @@
             "Path::Tiny" : "0",
             "Test::More" : "0",
             "Test::RequiresInternet" : "0",
-            "perl" : "5.010"
+            "perl" : "5.010",
+            "version" : "0"
          }
       }
    },
@@ -92,7 +93,7 @@
          "web" : "https://github.com/oalders/lazy"
       }
    },
-   "version" : "1.000001",
+   "version" : "1.000002",
    "x_Dist_Zilla" : {
       "perl" : {
          "version" : "5.042002"
@@ -635,7 +636,7 @@
                   "branch" : null,
                   "changelog" : "Changes",
                   "signed" : 0,
-                  "tag" : "v1.000001",
+                  "tag" : "v1.000002",
                   "tag_format" : "v%V",
                   "tag_message" : "v%V"
                },
@@ -728,6 +729,17 @@
             },
             "name" : "Prereqs",
             "version" : "6.037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::DynamicPrereqs",
+            "config" : {
+               "Dist::Zilla::Role::ModuleMetadata" : {
+                  "Module::Metadata" : "1.000038",
+                  "version" : "0.006"
+               }
+            },
+            "name" : "DynamicPrereqs",
+            "version" : "0.040"
          },
          {
             "class" : "Dist::Zilla::Plugin::Prereqs",
@@ -852,6 +864,6 @@
    "x_generated_by_perl" : "v5.42.2",
    "x_serialization_backend" : "Cpanel::JSON::XS version 4.40",
    "x_spdx_expression" : "Artistic-2.0",
-   "x_static_install" : 1
+   "x_static_install" : 0
 }
 
