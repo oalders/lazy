@@ -1,6 +1,13 @@
 Revision history for lazy
 
 {{$NEXT}}
+    - Document t/local-install-via-args.t with detailed comments explaining
+      the test's purpose, fixture, resolver choices and per-arg rationale,
+      and emit Perl + App::cpm versions on failure to make CPAN testers
+      reports easier to triage (GH#36)
+    - Fix stale "Acme::CPANAuthors::Canadian" comment in
+      t/local-install-via-args.t — the test installs Local::StaticInstall
+
 
 1.000001  2026-05-08 20:39:23Z
     - Fix @INC hook to return empty list (not 1) for skipped modules, so
