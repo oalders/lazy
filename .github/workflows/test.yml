@@ -17,7 +17,7 @@ jobs:
     container:
       image: perldocker/perl-tester:5.42
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.2
       - name: Run Tests
         env:
           AUTHOR_TESTING: 1
@@ -35,7 +35,7 @@ jobs:
     container:
       image: perldocker/perl-tester:5.42
     steps:
-      - uses: actions/checkout@v6  # codecov wants to be inside a Git repository
+      - uses: actions/checkout@v6.0.2  # codecov wants to be inside a Git repository
       - uses: actions/download-artifact@v8
         with:
           name: build_dir
@@ -50,7 +50,7 @@ jobs:
     container:
       image: perldocker/perl-tester:5.42
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.2
       - name: Install ubi, omegasort and precious
         uses: oalders/install-ubi-action@v0.0.6
         with:
@@ -104,7 +104,7 @@ jobs:
       # default `version: main` builds App::cpm v1.0+, which requires Perl
       # 5.24, so pin the bootstrap to 0.997017 on older Perls (GH#36).
       - name: install deps using cpm
-        uses: perl-actions/install-with-cpm@v2.3
+        uses: perl-actions/install-with-cpm@v2.4
         with:
           cpanfile: 'cpanfile'
           args: '--with-suggests --with-recommends --with-test'
