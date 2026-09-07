@@ -45,7 +45,7 @@ Two non-obvious constraints worth preserving:
 
 ## CI
 
-`.github/workflows/test.yml` runs three jobs in `perldocker/perl-tester:5.42`:
+`.github/workflows/test.yml` runs three jobs; `build-job` and `coverage-job` run in `perldocker/perl-tester:5.44`:
 
 1. `build-job` — `auto-build-and-test-dist` with all author/release env vars on, uploads `build_dir` artifact.
 2. `coverage-job` — installs deps from the built tarball and runs `test-dist` with `CODECOV_TOKEN`.
