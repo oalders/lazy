@@ -49,7 +49,7 @@ Two non-obvious constraints worth preserving:
 
 1. `build-job` — `auto-build-and-test-dist` with all author/release env vars on, uploads `build_dir` artifact.
 2. `coverage-job` — installs deps from the built tarball and runs `test-dist` with `CODECOV_TOKEN`.
-3. `test-job` — matrix of Perl 5.24 → 5.42 on `ubuntu-latest`, installs from `cpanfile` via `perl-actions/install-with-cpm`, runs `prove -lr t` with `AUTHOR_TESTING=0 RELEASE_TESTING=0`.
+3. `test-job` — matrix of Perl 5.24 → 5.42 on `ubuntu-latest`, installs from `cpanfile` via `perl-actions/install-with-cpm`, runs `prove -lr t` with `AUTHOR_TESTING=0 RELEASE_TESTING=0`. The floor is 5.24 because `App::cpm` (a hard runtime dep of `lazy`) and its whole toolchain family now require Perl 5.24+; older Perls can no longer install the dependency at all.
 
 The matrix step deliberately runs only end-user tests, so author-only failures (POD, spelling, precious) won't block PRs across old Perls — they're caught in `build-job` and the `lint` workflow instead.
 
