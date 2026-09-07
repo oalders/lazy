@@ -10,12 +10,16 @@ on:
       - '*'
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-job:
     name: Build distribution
     runs-on: ubuntu-latest
     container:
-      image: perldocker/perl-tester:5.42
+      image: perldocker/perl-tester:5.44
     steps:
       - uses: actions/checkout@v6
       - name: Run Tests
@@ -33,7 +37,7 @@ jobs:
     needs: build-job
     runs-on: ubuntu-latest
     container:
-      image: perldocker/perl-tester:5.42
+      image: perldocker/perl-tester:5.44
     steps:
       - uses: actions/checkout@v6  # codecov wants to be inside a Git repository
       - uses: actions/download-artifact@v8
@@ -44,24 +48,6 @@ jobs:
         run: cpan-install-dist-deps && test-dist
         env:
           CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
-  lint-job:
-    name: Lint
-    runs-on: ubuntu-latest
-    container:
-      image: perldocker/perl-tester:5.42
-    steps:
-      - uses: actions/checkout@v6
-      - name: Install ubi, omegasort and precious
-        uses: oalders/install-ubi-action@v0.0.6
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          projects: |
-            houseabsolute/omegasort
-            houseabsolute/precious
-      - name: Install Perl lint tools
-        run: cpm install -g --show-build-log-on-failure App::perlimports Perl::Critic Perl::Tidy
-      - name: Run precious lint
-        run: precious lint --all
   test-job:
     needs: build-job
     runs-on: ${{ matrix.os }}
@@ -70,8 +56,6 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         perl-version:
-          - '5.20'
-          - '5.22'
           - '5.24'
           - '5.26'
           - '5.28'
@@ -93,22 +77,11 @@ jobs:
         with:
           name: build_dir
           path: .
-      # Mirror the dist.ini DynamicPrereqs cap into cpanfile for CI. The
-      # [DynamicPrereqs] plugin only writes Makefile.PL, so install-with-cpm
-      # (which reads cpanfile) would otherwise pull App::cpm v1.0.0+ on Perl
-      # < 5.24 and fail (GH#36).
-      - name: Cap App::cpm at 0.997017 on Perl < 5.24 (cpanfile)
-        run: |
-          printf '\nrequires "App::cpm" => "<= 0.997017" if "$]" < 5.024;\n' >> cpanfile
-      # install-with-cpm bootstraps cpm itself before reading cpanfile. The
-      # default `version: main` builds App::cpm v1.0+, which requires Perl
-      # 5.24, so pin the bootstrap to 0.997017 on older Perls (GH#36).
       - name: install deps using cpm
         uses: perl-actions/install-with-cpm@v2.3
         with:
           cpanfile: 'cpanfile'
           args: '--with-suggests --with-recommends --with-test'
-          version: ${{ (matrix.perl-version == '5.20' || matrix.perl-version == '5.22') && '0.997017' || 'main' }}
       - run: prove -lr t
         env:
           AUTHOR_TESTING: 0

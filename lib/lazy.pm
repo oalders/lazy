@@ -2,6 +2,7 @@ package lazy;
 
 use strict;
 use warnings;
+use 5.024;    # App::cpm and its toolchain family require Perl 5.24+
 use feature qw( state );
 
 our $VERSION = '1.000003';
