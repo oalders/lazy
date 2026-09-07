@@ -7,12 +7,12 @@ use feature qw( state );
 
 our $VERSION = '1.000003';
 
-use App::cpm 0.997017 ();                # CLI has no $VERSION
-use App::cpm::CLI     ();
-use Carp              qw( longmess );
-use Sub::Name         qw( subname );
-use Sub::Identify     qw( sub_name );
-use Try::Tiny         qw( catch try );
+use App::cpm 1 ();    # CLI has no $VERSION; v0.998xxx range is broken (GH#38)
+use App::cpm::CLI ();
+use Carp          qw( longmess );
+use Sub::Name     qw( subname );
+use Sub::Identify qw( sub_name );
+use Try::Tiny     qw( catch try );
 
 # Cargo-culted from App::cpm::CLI
 # Adding pass_through so that we don't have to keep up with all possible options
