@@ -120,6 +120,8 @@ sub import {
 
 =pod
 
+=for stopwords desugars
+
 =head1 SYNOPSIS
 
     # At the command line
@@ -221,6 +223,25 @@ L<perlrun>), where C<-M> on the command line uses spaces.
 =head1 CAVEATS
 
 * Remove C<lazy> before you put your work into production.
+
+* C<lazy> only installs modules that are B<missing>, not modules that are
+present but too old.  It works by pushing a code-ref hook onto C<@INC>, which
+Perl consults only when C<require> cannot find a module's F<.pm> file on disk.
+A version-too-low failure is not a C<require> failure:
+
+    use lazy;
+    use Test::Most 0.42;   # dies if only 0.30 is installed
+
+desugars roughly to
+
+    require Test::Most;             # consults @INC - succeeds, the file is on disk
+    Test::Most->VERSION('0.42');   # throws *after* require returns
+
+By the time C<VERSION> throws, C<@INC> is no longer being walked, so the hook
+never runs.  To upgrade a module that is installed but too old, run L<App::cpm>
+directly with a version range:
+
+    cpm install -g 'Test::Most~">=0.42"'
 
 =head1 SEE ALSO
 
