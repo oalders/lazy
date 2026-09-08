@@ -5,7 +5,7 @@ use warnings;
 use 5.024;    # App::cpm and its toolchain family require Perl 5.24+
 use feature qw( state );
 
-our $VERSION = '1.000003';
+our $VERSION = '1.000004';
 
 use App::cpm 1 ();    # CLI has no $VERSION; v0.998xxx range is broken (GH#38)
 use App::cpm::CLI ();

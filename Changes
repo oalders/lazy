@@ -1,5 +1,7 @@
 Revision history for lazy
 
+{{$NEXT}}
+
 1.000003  2026-09-08 01:26:16Z
     - Raise the minimum Perl to 5.24 (use 5.024). App::cpm, a hard runtime
       dependency, and its toolchain now require 5.24+, so older Perls can
