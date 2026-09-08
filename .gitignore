@@ -1,6 +1,7 @@
 /lazy*
 *.sw*
 .build
+.nono/
 MYMETA.json
 MYMETA.yml
 Makefile
