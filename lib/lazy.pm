@@ -86,18 +86,14 @@ sub import {
         $name =~ s{/}{::}g;
         $name =~ s{\.pm\z}{};
 
-        if ( $name =~ qr{\Aauto::.*\.al\z} ) {
-            warn "skipping autoloader file $name";
-            return;
-        }
-        if ( $name =~ qr{\ANet::DNS::Resolver::} ) {
-            warn "skipping $name";
-            return;
-        }
-        if ( $name eq 'Encode::ConfigLocal' ) {
-            warn "skipping $name";
-            return;
-        }
+        # Silently skip probes we never want to install: autoloader split
+        # files, Net::DNS::Resolver's per-OS subclasses, and
+        # Encode::ConfigLocal.  These fire constantly during normal @INC
+        # searching, so warning about them is pure noise.
+        return
+               if $name =~ qr{\Aauto::.*\.al\z}
+            || $name =~ qr{\ANet::DNS::Resolver::}
+            || $name eq 'Encode::ConfigLocal';
 
         warn "lazy: installing $name ...\n";
         try {
